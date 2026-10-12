@@ -273,9 +273,13 @@ export const seedProviders: Provider[] = [
     ],
   },
 ];
-export function emptyAccess(providerId: string): Access {
+export function emptyAccess(
+  providerId: string,
+  client = "Unknown client",
+): Access {
   return {
     providerId,
+    client,
     status: "unverified",
     installed: false,
     setupConfirmed: false,
@@ -304,7 +308,7 @@ export function emptyAccess(providerId: string): Access {
 }
 export function initialWorkspace(now = new Date().toISOString()): Workspace {
   const builtin: Access = {
-    ...emptyAccess("scratchpad"),
+    ...emptyAccess("scratchpad", "Pick-Me browser"),
     status: "ready",
     installed: true,
     setupConfirmed: true,

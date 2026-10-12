@@ -280,18 +280,16 @@ export default function App() {
           {page === "evidence" && (
             <EvidenceLibrary
               providers={workspace.providers}
-              onProvider={(p) =>
-                update((w) => {
-                  const candidate = {
-                    ...w,
-                    providers: w.providers.map((old) =>
-                      old.id === p.id ? p : old,
-                    ),
-                  };
-                  parseImport(JSON.stringify(candidate));
-                  return candidate;
-                })
-              }
+              onProvider={(p) => {
+                const candidate = {
+                  ...workspace,
+                  providers: workspace.providers.map((old) =>
+                    old.id === p.id ? p : old,
+                  ),
+                };
+                parseImport(JSON.stringify(candidate));
+                update(() => candidate);
+              }}
             />
           )}
           {page === "backup" && (

@@ -8,13 +8,11 @@ async function importWorkspace(
   await page
     .getByRole("button", { name: "Backup & discovery", exact: true })
     .click();
-  await page
-    .getByLabel("Import JSON file")
-    .setInputFiles({
-      name: "synthetic-workspace.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(w)),
-    });
+  await page.getByLabel("Import JSON file").setInputFiles({
+    name: "synthetic-workspace.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(w)),
+  });
   await expect(
     page.getByRole("heading", { name: "Review import" }),
   ).toBeVisible();
@@ -80,13 +78,11 @@ test("imported markup is inert and unsafe source URLs are rejected before replac
   await page
     .getByRole("button", { name: "Backup & discovery", exact: true })
     .click();
-  await page
-    .getByLabel("Import JSON file")
-    .setInputFiles({
-      name: "unsafe.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(w)),
-    });
+  await page.getByLabel("Import JSON file").setInputFiles({
+    name: "unsafe.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(w)),
+  });
   await expect(page.getByRole("alert")).toContainText("public HTTPS URL");
   await expect(
     page.getByRole("heading", { name: "Review import" }),
@@ -99,11 +95,9 @@ test("failed refresh preserves dates; successful retrieval never verifies an unc
   await page
     .getByRole("button", { name: "Evidence library", exact: true })
     .click();
-  const card = page
-    .locator(".evidence-provider")
-    .filter({
-      has: page.getByRole("heading", { name: "ChatGPT", exact: true }),
-    });
+  const card = page.locator(".evidence-provider").filter({
+    has: page.getByRole("heading", { name: "ChatGPT", exact: true }),
+  });
   const stored = () =>
     page.evaluate(
       () =>

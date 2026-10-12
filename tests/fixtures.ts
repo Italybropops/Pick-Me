@@ -60,6 +60,7 @@ export function access(
 ): Access {
   return {
     providerId,
+    client: "Test desktop",
     status: "ready",
     installed: true,
     setupConfirmed: true,

@@ -82,13 +82,18 @@ function prompt(t: Task, p: Provider): string {
 function evaluate(
   t: Task,
   p: Provider,
-  a: Access | undefined,
+  observation: Access | undefined,
   h: Hardware,
   now: string,
 ): Route {
+  const a = observation?.client === p.client ? observation : undefined;
   const fail: string[] = [],
     missing: string[] = [],
     notes: string[] = [];
+  if (observation && !a)
+    missing.push(
+      `Access was observed in ${observation.client}, not ${p.client}. Confirm this client's access, cost, and allowance in Inventory.`,
+    );
   const evidence = (topic: Provider["evidence"][number]["topics"][number]) => {
     const claims = p.evidence.filter((e) => e.topics.includes(topic));
     if (
@@ -190,7 +195,11 @@ function evaluate(
       missing.push(
         "Verify the exact model and output license for commercial use.",
       );
-    if (p.commercial === true) evidence("commercial");
+    if (
+      p.commercial === true ||
+      p.evidence.some((e) => e.topics.includes("commercial"))
+    )
+      evidence("commercial");
     if (!a?.licenseConfirmed)
       missing.push("Confirm your model, asset, and output licensing.");
   }
@@ -319,7 +328,7 @@ export function recommend(
         .filter((p) => p.capabilities.includes(capability))
         .map((p) => ({
           p,
-          a: inv.find((a) => a.providerId === p.id),
+          a: inv.find((a) => a.providerId === p.id && a.client === p.client),
           r: evaluate(
             { ...t, capabilities: [capability] },
             p,
@@ -348,14 +357,15 @@ export function recommend(
             `No compatible handoff from ${previous.name} to ${o.p.name}.`,
           );
         if (
-          [previous, o.p].some(
-            (p) =>
-              !p.evidence.some(
-                (e) =>
-                  e.topics.includes("formats") &&
-                  evidenceStatus(e, now) === "verified",
-              ),
-          )
+          [previous, o.p].some((p) => {
+            const claims = p.evidence.filter((e) =>
+              e.topics.includes("formats"),
+            );
+            return (
+              !claims.length ||
+              claims.some((e) => evidenceStatus(e, now) !== "verified")
+            );
+          })
         )
           notes.push("Handoff formats need source verification.");
       }

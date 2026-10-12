@@ -11,7 +11,34 @@
     <title>Pick-Me · A clearer next step</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main
+        style="
+          max-width: 42rem;
+          margin: 4rem auto;
+          padding: 1.5rem;
+          font-family: system-ui, sans-serif;
+          line-height: 1.6;
+        "
+      >
+        <h1>Start Pick-Me with its local server</h1>
+        <p>
+          This source file is a Vite application entry point. Opening it as a
+          standalone HTML visualization does not compile or start the app.
+        </p>
+        <p>From the Pick-Me folder, run:</p>
+        <pre>
+npm ci
+npm run dev -- --port 5173 --strictPort</pre
+        >
+        <p>
+          Then open <code>http://127.0.0.1:5173</code> on the same machine. For
+          a production preview, run <code>npm run build</code> and
+          <code>npm run preview -- --port 4173 --strictPort</code>.
+        </p>
+        <p>This message is replaced when the application loads successfully.</p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

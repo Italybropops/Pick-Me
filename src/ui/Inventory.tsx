@@ -41,6 +41,7 @@ function AccessEditor({
           e.preventDefault();
           const parsed = AccessSchema.safeParse({
             ...a,
+            client: provider.client,
             provenance: "user-reported",
           });
           if (!parsed.success) {
@@ -519,7 +520,9 @@ export function Inventory({
       <HardwareEditor initial={w.hardware} onSave={onHardware} />
       <div className="inventory-grid">
         {w.providers.map((p) => {
-          const a = w.inventory.find((a) => a.providerId === p.id);
+          const a = w.inventory.find(
+            (a) => a.providerId === p.id && a.client === p.client,
+          );
           return (
             <article
               className="card inventory-card"
@@ -570,8 +573,9 @@ export function Inventory({
         <AccessEditor
           provider={editing}
           initial={
-            w.inventory.find((a) => a.providerId === editing.id) ??
-            emptyAccess(editing.id)
+            w.inventory.find(
+              (a) => a.providerId === editing.id && a.client === editing.client,
+            ) ?? emptyAccess(editing.id, editing.client)
           }
           onSave={onAccess}
           onClose={() => setEditing(null)}

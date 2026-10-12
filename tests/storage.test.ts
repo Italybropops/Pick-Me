@@ -93,8 +93,37 @@ it("bounds history size without trimming task or inventory", () => {
   expect(w.inventory).toEqual(workspace().inventory);
   expect(() => parseImport(JSON.stringify(w, null, 2))).not.toThrow();
 });
-it('does not transfer personal entitlements to a different client after a registry update', () => {
-  const w = mergeRegistry(workspace(), { schemaVersion: 1, kind: 'pick-me-registry', providers: [provider('fixture-editor', { client: 'Different API', zeroCost: false, kind: 'ai' })] });
+it("does not transfer personal entitlements to a different client after a registry update", () => {
+  const w = mergeRegistry(workspace(), {
+    schemaVersion: 1,
+    kind: "pick-me-registry",
+    providers: [
+      provider("fixture-editor", {
+        client: "Different API",
+        zeroCost: false,
+        kind: "ai",
+      }),
+    ],
+  });
   const d = recommend(w.task, w.providers, w.inventory, w.hardware, NOW);
-  expect(d.ready).toHaveLength(0); expect(d.conditional).toHaveLength(1);
+  expect(d.ready).toHaveLength(0);
+  expect(d.conditional).toHaveLength(1);
+});
+it("preserves legacy unscoped inventory but requires a fresh client-specific observation", () => {
+  const legacy = JSON.parse(JSON.stringify(workspace()));
+  delete legacy.inventory[0].client;
+  const loaded = parseImport(JSON.stringify(legacy));
+  expect(loaded.kind).toBe("pick-me-workspace");
+  if (loaded.kind !== "pick-me-workspace")
+    throw new Error("Expected workspace");
+  expect(loaded.inventory[0].plan).toBe(legacy.inventory[0].plan);
+  expect(
+    recommend(
+      loaded.task,
+      loaded.providers,
+      loaded.inventory,
+      loaded.hardware,
+      NOW,
+    ).ready,
+  ).toHaveLength(0);
 });

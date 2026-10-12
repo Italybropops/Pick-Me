@@ -35,18 +35,18 @@
     },
     "output": {
       "type": "string",
-      "maxLength": 500
+      "maxLength": 2500
     },
     "handoff": {
       "type": "string",
       "maxLength": 500
     },
     "prerequisites": {
-      "maxItems": 50,
+      "maxItems": 100,
       "type": "array",
       "items": {
         "type": "string",
-        "maxLength": 500
+        "maxLength": 1000
       }
     },
     "completionCheck": {

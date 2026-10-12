@@ -8,6 +8,12 @@
       "maxLength": 100,
       "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
     },
+    "client": {
+      "default": "Unscoped legacy observation",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -215,6 +221,7 @@
   },
   "required": [
     "providerId",
+    "client",
     "status",
     "installed",
     "setupConfirmed",

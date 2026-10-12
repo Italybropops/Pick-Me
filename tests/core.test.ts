@@ -10,6 +10,23 @@ import { provider, access, task, workspace, NOW } from "./fixtures";
 const run = (t = task(), ps = [provider()], inv = [access()]) =>
   recommend(t, ps, inv, workspace().hardware, NOW);
 describe("hard constraints before ranking", () => {
+  it("does not hide a standalone commercial conflict behind a personal license checkbox", () => {
+    const p = provider("license-conflict", { commercial: null });
+    p.evidence[0].topics = ["capabilities"];
+    p.evidence.push({
+      ...p.evidence[0],
+      id: "license-only",
+      topics: ["commercial"],
+      status: "conflicting",
+    });
+    expect(
+      run(
+        task({ commercial: true }),
+        [p],
+        [access("license-conflict", { licenseConfirmed: true })],
+      ).conditional,
+    ).toHaveLength(1);
+  });
   it("keeps private offline tasks local even when a cloud tool scores better", () => {
     const d = run(
       task({ privacy: "private", offline: true }),
@@ -163,13 +180,36 @@ describe("bounded workflows", () => {
     provider("writer"),
     provider("image", { capabilities: ["image"] }),
   ];
-  it('handles maximum format metadata without crashing a valid task', () => {
-    const first = provider('writer', { outputs: ['text/plain', ...Array.from({ length: 19 }, (_, i) => `${i}-`.padEnd(100, 'x'))] });
-    expect(() => run(task({ capabilities: ['writing', 'image'] }), [first, ps[1]], [access('writer'), access('image')])).not.toThrow();
+  it("handles maximum format metadata without crashing a valid task", () => {
+    const first = provider("writer", {
+      outputs: [
+        "text/plain",
+        ...Array.from({ length: 19 }, (_, i) => `${i}-`.padEnd(100, "x")),
+      ],
+    });
+    expect(() =>
+      run(
+        task({ capabilities: ["writing", "image"] }),
+        [first, ps[1]],
+        [access("writer"), access("image")],
+      ),
+    ).not.toThrow();
   });
-  it('does not let a verified formats claim hide a conflicting claim', () => {
-    const first = provider('writer'); first.evidence.push({ ...first.evidence[0], id: 'format-conflict', topics: ['formats'], status: 'conflicting' });
-    expect(run(task({ capabilities: ['writing', 'image'] }), [first, ps[1]], [access('writer'), access('image')]).workflow?.status).toBe('conditional');
+  it("does not let a verified formats claim hide a conflicting claim", () => {
+    const first = provider("writer");
+    first.evidence.push({
+      ...first.evidence[0],
+      id: "format-conflict",
+      topics: ["formats"],
+      status: "conflicting",
+    });
+    expect(
+      run(
+        task({ capabilities: ["writing", "image"] }),
+        [first, ps[1]],
+        [access("writer"), access("image")],
+      ).workflow?.status,
+    ).toBe("conditional");
   });
   it("builds two cost-checked stages with compatible handoffs", () => {
     const d = run(task({ capabilities: ["writing", "image"] }), ps, [

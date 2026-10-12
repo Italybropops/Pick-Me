@@ -113,6 +113,7 @@ export const ProviderSchema = z.strictObject({
 });
 export const AccessSchema = z.strictObject({
   providerId: id,
+  client: z.string().min(1).max(200).default("Unscoped legacy observation"),
   status: z.enum([
     "ready",
     "free-setup",
@@ -193,7 +194,7 @@ export const RouteSchema = z.strictObject({
   providerId: id,
   status: routeStatus,
   score: z.number().min(0).max(100),
-  reasons: z.array(short).max(50),
+  reasons: z.array(z.string().max(1000)).max(100),
   factors: z.record(z.string().max(100), rating),
   guidance: text,
   prompt: z.string().max(65000),
@@ -205,9 +206,9 @@ export const StageSchema = z.strictObject({
   providerId: id,
   capability: z.enum(capabilities),
   input: short,
-  output: short,
+  output: z.string().max(2500),
   handoff: short,
-  prerequisites: z.array(short).max(50),
+  prerequisites: z.array(z.string().max(1000)).max(100),
   completionCheck: short,
   guidance: text,
   incrementalCost: z.number().min(0).nullable(),
@@ -234,7 +235,7 @@ export const DecisionSchema = z.strictObject({
     .strictObject({
       status: routeStatus,
       stages: z.array(StageSchema).min(1).max(3),
-      notes: z.array(short).max(50),
+      notes: z.array(z.string().max(1000)).max(50),
       iterations: z.literal(1),
       qualityCheck: short,
       escalation: short,

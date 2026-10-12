@@ -231,6 +231,7 @@ export function EvidenceLibrary({
               <h2>{p.name}</h2>
               <button
                 className="text-button"
+                disabled={busy !== null}
                 onClick={() => {
                   setRecord(p);
                   setJson(JSON.stringify(p, null, 2));
@@ -286,6 +287,7 @@ export function EvidenceLibrary({
                   </button>
                   <button
                     className="text-button"
+                    disabled={busy !== null}
                     onClick={() => setEditing({ p, e })}
                   >
                     Review claim

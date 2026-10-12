@@ -380,6 +380,12 @@
             "maxLength": 100,
             "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
           },
+          "client": {
+            "default": "Unscoped legacy observation",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -587,6 +593,7 @@
         },
         "required": [
           "providerId",
+          "client",
           "status",
           "installed",
           "setupConfirmed",
@@ -876,11 +883,11 @@
                   "maximum": 100
                 },
                 "reasons": {
-                  "maxItems": 50,
+                  "maxItems": 100,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "maxLength": 500
+                    "maxLength": 1000
                   }
                 },
                 "factors": {
@@ -954,11 +961,11 @@
                   "maximum": 100
                 },
                 "reasons": {
-                  "maxItems": 50,
+                  "maxItems": 100,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "maxLength": 500
+                    "maxLength": 1000
                   }
                 },
                 "factors": {
@@ -1032,11 +1039,11 @@
                   "maximum": 100
                 },
                 "reasons": {
-                  "maxItems": 50,
+                  "maxItems": 100,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "maxLength": 500
+                    "maxLength": 1000
                   }
                 },
                 "factors": {
@@ -1110,11 +1117,11 @@
                   "maximum": 100
                 },
                 "reasons": {
-                  "maxItems": 50,
+                  "maxItems": 100,
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "maxLength": 500
+                    "maxLength": 1000
                   }
                 },
                 "factors": {
@@ -1264,18 +1271,18 @@
                         },
                         "output": {
                           "type": "string",
-                          "maxLength": 500
+                          "maxLength": 2500
                         },
                         "handoff": {
                           "type": "string",
                           "maxLength": 500
                         },
                         "prerequisites": {
-                          "maxItems": 50,
+                          "maxItems": 100,
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "maxLength": 500
+                            "maxLength": 1000
                           }
                         },
                         "completionCheck": {
@@ -1329,7 +1336,7 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "maxLength": 500
+                      "maxLength": 1000
                     }
                   },
                   "iterations": {

@@ -37,6 +37,16 @@ npm run preview -- --port 4173 --strictPort
 
 Open `http://127.0.0.1:4173`. This is a different storage origin; use export/import if moving data from the development server. Neither command publishes anything. After dependencies are installed, the app runs offline from a local server; it does not install a service worker or promise offline access to a remote host.
 
+### Source-file and embedded previews
+
+Do not open the repository's `index.html` as a standalone HTML visualization. It references a TypeScript/JSX entry module that Vite must compile and serve. A file renderer can reject local files, fail to serve the source modules, or display “Error occurred inside the visualization” before the app starts. The HTML includes launch instructions as a fallback when scripts cannot run. This cannot change the hosting application's own preview-renderer restrictions.
+
+The supported preview is the running local server above, opened in a browser on that machine. A remote cloud loopback URL is not reachable from your Mac without a supported port-forwarding facility; this onboarding interface does not provide one. Clone/download the feature branch and run it locally, or use a development environment that explicitly supports forwarding its Vite port. No public deployment is required. If you reinstall dependencies while Vite is already running and see `504 Outdated Optimize Dep`, stop the server and restart with `npm run dev -- --port 5173 --strictPort --force`.
+
+The repository `.npmrc` stores npm's cache in ignored `.cache/npm/`, avoiding this cloud machine's unwritable default cache. Package checksum and TLS verification remain enabled.
+
+Access observations are bound to an exact client name. A registry update that changes the client cannot inherit the previous client's cost or allowance. Older checkpoint exports without that field are preserved as unscoped observations and require confirmation before use.
+
 ### First useful result
 
 1. On **Find a route**, try the checklist example and click **Find my route**. The included manual text workspace is immediately usable.
