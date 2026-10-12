@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "capabilities": {
+      "minItems": 1,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "writing",
+          "organization",
+          "coding",
+          "research",
+          "image",
+          "video"
+        ]
+      }
+    },
+    "desiredOutput": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "successCriteria": {
+      "type": "string",
+      "maxLength": 20000
+    },
+    "inputs": {
+      "type": "string",
+      "maxLength": 20000
+    },
+    "deadline": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "privacy": {
+      "type": "string",
+      "enum": [
+        "public",
+        "private"
+      ]
+    },
+    "offline": {
+      "type": "boolean"
+    },
+    "commercial": {
+      "type": "boolean"
+    },
+    "automation": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "prefer",
+        "required"
+      ]
+    },
+    "weights": {
+      "type": "object",
+      "properties": {
+        "fit": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "quality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "setup": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "ease": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "interoperability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "automation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "cost": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        }
+      },
+      "required": [
+        "fit",
+        "quality",
+        "speed",
+        "setup",
+        "ease",
+        "interoperability",
+        "automation",
+        "cost"
+      ],
+      "additionalProperties": false
+    },
+    "tieThreshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 30
+    },
+    "maxStages": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "text",
+    "capabilities",
+    "desiredOutput",
+    "successCriteria",
+    "inputs",
+    "deadline",
+    "privacy",
+    "offline",
+    "commercial",
+    "automation",
+    "weights",
+    "tieThreshold",
+    "maxStages"
+  ],
+  "additionalProperties": false,
+  "$id": "https://github.com/Italybropops/Pick-Me/schemas/task.v1.json",
+  "title": "Pick-Me task v1"
+}
