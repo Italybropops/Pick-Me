@@ -6,7 +6,7 @@ import {
   recordDecision,
   STORAGE_KEY,
 } from "./core/storage";
-import { parseImport } from "./core/data";
+import { parseImport, applyEvidenceRefresh } from "./core/data";
 import { initialWorkspace } from "./data/seed";
 import type { Task, Workspace } from "./core/schema";
 import { TaskForm } from "./ui/TaskForm";
@@ -288,8 +288,18 @@ export default function App() {
                   ),
                 };
                 parseImport(JSON.stringify(candidate));
-                update(() => candidate);
+                update((w) => ({
+                  ...w,
+                  providers: w.providers.map((old) =>
+                    old.id === p.id ? p : old,
+                  ),
+                }));
               }}
+              onRefresh={(providerId, original, refreshed) =>
+                update((w) =>
+                  applyEvidenceRefresh(w, providerId, original, refreshed),
+                )
+              }
             />
           )}
           {page === "backup" && (

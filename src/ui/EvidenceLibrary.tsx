@@ -5,7 +5,12 @@ import {
   type Evidence,
   type Provider,
 } from "../core/schema";
-import { evidenceStatus, refreshEvidence } from "../core/data";
+import {
+  evidenceStatus,
+  refreshEvidence,
+  reviseEvidence,
+  reviseProvider,
+} from "../core/data";
 import { Badge, Check, displayDate, Field, Modal } from "./common";
 function EvidenceEditor({
   evidence: initial,
@@ -24,26 +29,9 @@ function EvidenceEditor({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          const changed =
-            e.claim !== initial.claim ||
-            e.url !== initial.url ||
-            e.scope !== initial.scope ||
-            e.topics.join() !== initial.topics.join() ||
-            e.sourceType !== initial.sourceType;
-          const result = EvidenceSchema.safeParse({
-            ...e,
-            verifiedAt: reviewed
-              ? new Date().toISOString()
-              : changed
-                ? null
-                : e.verifiedAt,
-            status:
-              e.status === "verified" &&
-              !reviewed &&
-              (changed || initial.status !== "verified")
-                ? "uncertain"
-                : e.status,
-          });
+          const result = EvidenceSchema.safeParse(
+            reviseEvidence(initial, e, reviewed),
+          );
           if (!result.success) {
             setError(result.error.issues.map((i) => i.message).join(" "));
             return;
@@ -175,9 +163,15 @@ function EvidenceEditor({
 export function EvidenceLibrary({
   providers,
   onProvider,
+  onRefresh,
 }: {
   providers: Provider[];
   onProvider: (p: Provider) => void;
+  onRefresh: (
+    providerId: string,
+    original: Evidence,
+    refreshed: Evidence,
+  ) => void;
 }) {
   const [editing, setEditing] = useState<{ p: Provider; e: Evidence } | null>(
       null,
@@ -279,7 +273,7 @@ export function EvidenceLibrary({
                     onClick={async () => {
                       setBusy(e.id);
                       const refreshed = await refreshEvidence(e);
-                      update(p, refreshed);
+                      onRefresh(p.id, e, refreshed);
                       setBusy(null);
                     }}
                   >
@@ -324,17 +318,7 @@ export function EvidenceLibrary({
                   throw new Error(
                     "Keep the stable provider ID. Import a new record to add a tool.",
                   );
-                parsed.evidence = parsed.evidence.map((ev) => {
-                  const old = record.evidence.find((o) => o.id === ev.id);
-                  return !old ||
-                    ev.claim !== old.claim ||
-                    ev.url !== old.url ||
-                    ev.scope !== old.scope ||
-                    ev.topics.join() !== old.topics.join()
-                    ? { ...ev, verifiedAt: null, status: "uncertain" }
-                    : { ...ev, verifiedAt: old.verifiedAt };
-                });
-                onProvider(parsed);
+                onProvider(reviseProvider(record, parsed));
                 setRecord(null);
               } catch (e) {
                 setError(e instanceof Error ? e.message : "Invalid record");

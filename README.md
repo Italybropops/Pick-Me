@@ -112,6 +112,10 @@ The browser test runner starts/stops its own local server. Tests use synthetic d
 
 See [docs/VERIFICATION.md](docs/VERIFICATION.md) for executed checks and limits. Cloud Linux Chromium checks do not establish Safari, macOS, VoiceOver, actual local-model performance, vendor feature availability, or account entitlements.
 
+The independent audit and requirements matrix are in [docs/AUDIT.md](docs/AUDIT.md). The [Phase 2 roadmap](docs/ROADMAP.md#phase-2--software-pre-installation-evaluator) records a Software Pre-Installation Evaluator as **PLANNED / NOT IMPLEMENTED**.
+
+Evidence and backup repairs from the audit: conflicting cost claims require verification; conflicting quality claims cannot inflate the score. Editing source/provenance or material provider facts clears the affected verification, and changing a source URL clears its old retrieval metadata. Delayed refresh results update retrieval metadata only and preserve newer drafts, claims, inventory, and tasks. Exports use compact JSON when formatting alone would exceed the 2 MB import limit; no fields are dropped.
+
 ## Future local-agent interface
 
 The UI-independent TypeScript API is in `src/core/engine.ts`:

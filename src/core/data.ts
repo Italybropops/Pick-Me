@@ -4,6 +4,7 @@ import {
   safeUrl,
   type Evidence,
   type ImportData,
+  type Provider,
   type Workspace,
 } from "./schema";
 export const MAX_BYTES = 2_000_000;
@@ -83,9 +84,122 @@ export function parseImport(raw: string): ImportData {
   return data;
 }
 export function exportWorkspace(data: Workspace): string {
-  const json = JSON.stringify(data, null, 2);
+  const formatted = JSON.stringify(data, null, 2);
+  const json =
+    new TextEncoder().encode(formatted).length <= MAX_BYTES
+      ? formatted
+      : JSON.stringify(data);
   parseImport(json);
   return json;
+}
+
+// A local edit is not a source retrieval or verification event.
+export function reviseEvidence(
+  original: Evidence | undefined,
+  draft: Evidence,
+  reviewed = false,
+  now = new Date().toISOString(),
+): Evidence {
+  const changed =
+    !original ||
+    draft.claim !== original.claim ||
+    draft.url !== original.url ||
+    draft.scope !== original.scope ||
+    draft.sourceType !== original.sourceType ||
+    draft.topics.join() !== original.topics.join();
+  const sameSource = original?.url === draft.url;
+  const needsReview =
+    changed || (draft.status === "verified" && original?.status !== "verified");
+  return {
+    ...draft,
+    verifiedAt: reviewed
+      ? now
+      : changed
+        ? null
+        : (original?.verifiedAt ?? null),
+    status:
+      !reviewed && needsReview && draft.status === "verified"
+        ? original?.status === "conflicting"
+          ? "conflicting"
+          : "uncertain"
+        : draft.status,
+    fetchedAt: sameSource ? original!.fetchedAt : null,
+    lastError: sameSource ? original!.lastError : null,
+  };
+}
+
+export function reviseProvider(original: Provider, draft: Provider): Provider {
+  const changedTopics = new Set<Evidence["topics"][number]>();
+  const changed = (key: keyof Provider) =>
+    JSON.stringify(original[key]) !== JSON.stringify(draft[key]);
+  if (changed("client") || changed("kind")) {
+    original.evidence
+      .concat(draft.evidence)
+      .forEach((e) => e.topics.forEach((t) => changedTopics.add(t)));
+  }
+  if (changed("capabilities") || changed("os") || changed("requiresModel"))
+    changedTopics.add("capabilities");
+  if (changed("offline")) changedTopics.add("offline");
+  if (changed("commercial")) changedTopics.add("commercial");
+  if (changed("zeroCost")) changedTopics.add("cost");
+  if (changed("inputs") || changed("outputs")) changedTopics.add("formats");
+  if (original.ratings.quality !== draft.ratings.quality)
+    changedTopics.add("quality");
+  if (changed("integrations"))
+    ["automation", "cost", "offline"].forEach((t) =>
+      changedTopics.add(t as Evidence["topics"][number]),
+    );
+  return {
+    ...draft,
+    evidence: draft.evidence.map((e) => {
+      const revised = reviseEvidence(
+        original.evidence.find((old) => old.id === e.id),
+        e,
+      );
+      return e.topics.some((t) => changedTopics.has(t))
+        ? {
+            ...revised,
+            status:
+              revised.status === "conflicting" ? "conflicting" : "uncertain",
+            verifiedAt: null,
+          }
+        : revised;
+    }),
+  };
+}
+
+export function applyEvidenceRefresh(
+  current: Workspace,
+  providerId: string,
+  original: Evidence,
+  refreshed: Evidence,
+): Workspace {
+  return {
+    ...current,
+    providers: current.providers.map((p) =>
+      p.id !== providerId
+        ? p
+        : {
+            ...p,
+            evidence: p.evidence.map((e) =>
+              e.id !== original.id || e.url !== original.url
+                ? e
+                : {
+                    ...e,
+                    fetchedAt: refreshed.lastError
+                      ? e.fetchedAt
+                      : e.fetchedAt &&
+                          refreshed.fetchedAt &&
+                          Date.parse(e.fetchedAt) >
+                            Date.parse(refreshed.fetchedAt)
+                        ? e.fetchedAt
+                        : refreshed.fetchedAt,
+                    lastError: refreshed.lastError,
+                  },
+            ),
+          },
+    ),
+  };
 }
 export async function refreshEvidence(
   e: Evidence,

@@ -1,5 +1,7 @@
 # MVP verification
 
+This is the historical implementation verification from October 12. See [AUDIT.md](AUDIT.md) for the subsequent independent audit, current requirements matrix, and repair results.
+
 Verified in the Codex Linux cloud workspace on 2026-10-12, using Node 24.19.0, npm 11.9.0, and system Chromium. All application scenarios and account-like observations used synthetic data.
 
 | Check | Actual result |

@@ -110,6 +110,13 @@ function evaluate(
     );
   evidence("capabilities");
   if (
+    p.evidence.some(
+      (e) =>
+        e.topics.includes("cost") && evidenceStatus(e, now) === "conflicting",
+    )
+  )
+    evidence("cost");
+  if (
     a?.status === "paid" ||
     (a?.incrementalCost !== null &&
       a?.incrementalCost !== undefined &&
@@ -224,6 +231,9 @@ function evaluate(
   }
   const qualityKnown =
     p.ratings.quality !== null &&
+    p.evidence
+      .filter((e) => e.topics.includes("quality"))
+      .every((e) => evidenceStatus(e, now) === "verified") &&
     p.evidence.some(
       (e) =>
         e.topics.includes("quality") &&
