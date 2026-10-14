@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "providerId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "capability": {
+      "type": "string",
+      "enum": [
+        "writing",
+        "organization",
+        "coding",
+        "research",
+        "image",
+        "video"
+      ]
+    },
+    "input": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "output": {
+      "type": "string",
+      "maxLength": 2500
+    },
+    "handoff": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "prerequisites": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      }
+    },
+    "completionCheck": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "guidance": {
+      "type": "string",
+      "maxLength": 20000
+    },
+    "incrementalCost": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "setup",
+        "conditional",
+        "excluded"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "providerId",
+    "capability",
+    "input",
+    "output",
+    "handoff",
+    "prerequisites",
+    "completionCheck",
+    "guidance",
+    "incrementalCost",
+    "status"
+  ],
+  "additionalProperties": false,
+  "$id": "https://github.com/Italybropops/Pick-Me/schemas/stage.v1.json",
+  "title": "Pick-Me stage v1"
+}

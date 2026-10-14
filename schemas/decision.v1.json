@@ -1,0 +1,568 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "ready": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "setup",
+              "conditional",
+              "excluded"
+            ]
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reasons": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "factors": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            }
+          },
+          "guidance": {
+            "type": "string",
+            "maxLength": 20000
+          },
+          "prompt": {
+            "type": "string",
+            "maxLength": 65000
+          },
+          "evidenceIds": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+            }
+          }
+        },
+        "required": [
+          "providerId",
+          "status",
+          "score",
+          "reasons",
+          "factors",
+          "guidance",
+          "prompt",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "setup": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "setup",
+              "conditional",
+              "excluded"
+            ]
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reasons": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "factors": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            }
+          },
+          "guidance": {
+            "type": "string",
+            "maxLength": 20000
+          },
+          "prompt": {
+            "type": "string",
+            "maxLength": 65000
+          },
+          "evidenceIds": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+            }
+          }
+        },
+        "required": [
+          "providerId",
+          "status",
+          "score",
+          "reasons",
+          "factors",
+          "guidance",
+          "prompt",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "conditional": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "setup",
+              "conditional",
+              "excluded"
+            ]
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reasons": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "factors": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            }
+          },
+          "guidance": {
+            "type": "string",
+            "maxLength": 20000
+          },
+          "prompt": {
+            "type": "string",
+            "maxLength": 65000
+          },
+          "evidenceIds": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+            }
+          }
+        },
+        "required": [
+          "providerId",
+          "status",
+          "score",
+          "reasons",
+          "factors",
+          "guidance",
+          "prompt",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "excluded": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "setup",
+              "conditional",
+              "excluded"
+            ]
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reasons": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          },
+          "factors": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            }
+          },
+          "guidance": {
+            "type": "string",
+            "maxLength": 20000
+          },
+          "prompt": {
+            "type": "string",
+            "maxLength": 65000
+          },
+          "evidenceIds": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+            }
+          }
+        },
+        "required": [
+          "providerId",
+          "status",
+          "score",
+          "reasons",
+          "factors",
+          "guidance",
+          "prompt",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "comparison": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "providerIds": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "difference": {
+              "type": "number"
+            },
+            "threshold": {
+              "type": "number"
+            },
+            "test": {
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "required": [
+            "providerIds",
+            "difference",
+            "threshold",
+            "test"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "workflow": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "ready",
+                "setup",
+                "conditional",
+                "excluded"
+              ]
+            },
+            "stages": {
+              "minItems": 1,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+                  },
+                  "providerId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+                  },
+                  "capability": {
+                    "type": "string",
+                    "enum": [
+                      "writing",
+                      "organization",
+                      "coding",
+                      "research",
+                      "image",
+                      "video"
+                    ]
+                  },
+                  "input": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "output": {
+                    "type": "string",
+                    "maxLength": 2500
+                  },
+                  "handoff": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "prerequisites": {
+                    "maxItems": 100,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 1000
+                    }
+                  },
+                  "completionCheck": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "guidance": {
+                    "type": "string",
+                    "maxLength": 20000
+                  },
+                  "incrementalCost": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ready",
+                      "setup",
+                      "conditional",
+                      "excluded"
+                    ]
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "id",
+                  "providerId",
+                  "capability",
+                  "input",
+                  "output",
+                  "handoff",
+                  "prerequisites",
+                  "completionCheck",
+                  "guidance",
+                  "incrementalCost",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "maxItems": 50,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            },
+            "iterations": {
+              "type": "number",
+              "const": 1
+            },
+            "qualityCheck": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "escalation": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "stop": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "extraCost": {
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "required": [
+            "status",
+            "stages",
+            "notes",
+            "iterations",
+            "qualityCheck",
+            "escalation",
+            "stop",
+            "extraCost"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nextAction": {
+      "type": "string",
+      "maxLength": 20000
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "taskId",
+    "createdAt",
+    "ready",
+    "setup",
+    "conditional",
+    "excluded",
+    "comparison",
+    "workflow",
+    "nextAction"
+  ],
+  "additionalProperties": false,
+  "$id": "https://github.com/Italybropops/Pick-Me/schemas/decision.v1.json",
+  "title": "Pick-Me decision v1"
+}

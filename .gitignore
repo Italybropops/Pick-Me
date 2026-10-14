@@ -1,0 +1,16 @@
+node_modules/
+.cache/
+dist/
+test-results/
+playwright-report/
+coverage/
+.env
+.env.*
+!.env.example
+*.local
+private/
+exports/
+backups/
+pick-me-backup*.json
+*.log
+.DS_Store

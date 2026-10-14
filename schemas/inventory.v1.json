@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "providerId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+    },
+    "client": {
+      "default": "Unscoped legacy observation",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "free-setup",
+        "uncertain",
+        "exhausted",
+        "paid",
+        "unverified"
+      ]
+    },
+    "installed": {
+      "type": "boolean"
+    },
+    "setupConfirmed": {
+      "type": "boolean"
+    },
+    "plan": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "incrementalCost": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "checkedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provenance": {
+      "type": "string",
+      "enum": [
+        "user-reported",
+        "synthetic",
+        "app-builtin"
+      ]
+    },
+    "freshnessDays": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 365
+    },
+    "localVerified": {
+      "type": "boolean"
+    },
+    "hardwareConfirmed": {
+      "type": "boolean"
+    },
+    "licenseConfirmed": {
+      "type": "boolean"
+    },
+    "automationVerified": {
+      "type": "boolean"
+    },
+    "modelsReady": {
+      "type": "boolean"
+    },
+    "allowance": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "unlimited",
+            "metered",
+            "unknown"
+          ]
+        },
+        "remaining": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "checkedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resetsAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "poolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+        },
+        "perRun": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "remaining",
+        "unit",
+        "checkedAt",
+        "resetsAt",
+        "poolId",
+        "perRun"
+      ],
+      "additionalProperties": false
+    },
+    "menus": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "client": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "settings": {
+            "minItems": 1,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "checkedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "client",
+          "model",
+          "settings",
+          "checkedAt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 20000
+    }
+  },
+  "required": [
+    "providerId",
+    "client",
+    "status",
+    "installed",
+    "setupConfirmed",
+    "plan",
+    "incrementalCost",
+    "checkedAt",
+    "provenance",
+    "freshnessDays",
+    "localVerified",
+    "hardwareConfirmed",
+    "licenseConfirmed",
+    "automationVerified",
+    "modelsReady",
+    "allowance",
+    "menus",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "$id": "https://github.com/Italybropops/Pick-Me/schemas/inventory.v1.json",
+  "title": "Pick-Me inventory v1"
+}

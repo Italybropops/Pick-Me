@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "kind": {
+      "type": "string",
+      "const": "pick-me-registry"
+    },
+    "providers": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "number",
+            "const": 1
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "client": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "ai"
+            ]
+          },
+          "capabilities": {
+            "minItems": 1,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "writing",
+                "organization",
+                "coding",
+                "research",
+                "image",
+                "video"
+              ]
+            }
+          },
+          "offline": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "commercial": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "zeroCost": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "os": {
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "any",
+                "macos",
+                "linux",
+                "windows"
+              ]
+            }
+          },
+          "requiresModel": {
+            "type": "boolean"
+          },
+          "inputs": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "outputs": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "ratings": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "speed": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "ease": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "interoperability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "automation": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              }
+            },
+            "required": [
+              "quality",
+              "speed",
+              "ease",
+              "interoperability",
+              "automation"
+            ],
+            "additionalProperties": false
+          },
+          "integrations": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "purpose": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "destination": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "support": {
+                  "type": "string",
+                  "enum": [
+                    "verified",
+                    "unknown"
+                  ]
+                },
+                "setup": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "cost": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "required",
+                    "optional",
+                    "unnecessary"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "purpose",
+                "destination",
+                "support",
+                "setup",
+                "cost",
+                "role"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "evidence": {
+            "minItems": 1,
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$"
+                },
+                "claim": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "topics": {
+                  "minItems": 1,
+                  "maxItems": 7,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "capabilities",
+                      "offline",
+                      "commercial",
+                      "cost",
+                      "formats",
+                      "automation",
+                      "quality"
+                    ]
+                  }
+                },
+                "url": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "sourceType": {
+                  "type": "string",
+                  "enum": [
+                    "official-docs",
+                    "official-repository",
+                    "release-notes",
+                    "benchmark",
+                    "user-reported",
+                    "project-code"
+                  ]
+                },
+                "scope": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "verified",
+                    "uncertain",
+                    "stale",
+                    "conflicting"
+                  ]
+                },
+                "verifiedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "fetchedAt": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "freshnessDays": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 3650
+                },
+                "lastError": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "claim",
+                "topics",
+                "url",
+                "sourceType",
+                "scope",
+                "status",
+                "verifiedAt",
+                "fetchedAt",
+                "freshnessDays",
+                "lastError"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "name",
+          "description",
+          "client",
+          "kind",
+          "capabilities",
+          "offline",
+          "commercial",
+          "zeroCost",
+          "os",
+          "requiresModel",
+          "inputs",
+          "outputs",
+          "ratings",
+          "integrations",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "providers"
+  ],
+  "additionalProperties": false,
+  "$id": "https://github.com/Italybropops/Pick-Me/schemas/registry.v1.json",
+  "title": "Pick-Me registry v1"
+}
